@@ -11,31 +11,19 @@ Basic usage:
     >>> x = torch.randn(8, 512)
     >>> y = torch.randn(8, 512)
     >>> out = layer(x, y)
-
-Advanced usage with registry:
-    >>> from aion_torch import register_adapter, make_adapter
-    >>> register_adapter("aion", AionResidual)
-    >>> layer = make_adapter("aion", alpha0=0.1, beta=0.05)
 """
 
-__version__ = "0.3.3"
+__version__ = "1.0.0"
 
 from .adapters import AionBlock
 from .aion_adapter import AionResidual
 from .alpha import compute_alpha
 from .energy import energy
-from .registry import list_adapters, make_adapter, register_adapter
-
-# Auto-register adapters
-register_adapter("aion", AionResidual)
 
 __all__ = [
     "AionResidual",
     "AionBlock",
     "energy",
     "compute_alpha",
-    "register_adapter",
-    "make_adapter",
-    "list_adapters",
     "__version__",
 ]

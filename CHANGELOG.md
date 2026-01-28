@@ -4,6 +4,25 @@ All notable changes to AION-Torch will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-01-29
+
+First stable release. API is now considered stable and follows semantic versioning.
+
+### Changed
+- **BREAKING**: Removed registry system (`register_adapter`, `make_adapter`, `list_adapters`).
+  Use `AionResidual` directly instead.
+- Development Status upgraded to Production/Stable.
+- Stricter mypy configuration (`disallow_untyped_defs = true`).
+- Removed License classifier (superseded by `license = "MIT"` per PEP 639).
+
+### Added
+- `py.typed` marker for PEP 561 typed package support.
+- `Typing :: Typed` classifier.
+
+### Removed
+- `registry.py` module - YAGNI, only one adapter exists. If you were using the registry,
+  simply use `AionResidual(...)` directly instead of `make_adapter("aion", ...)`.
+
 ## [0.3.3] - 2025-11-16
 
 ### Changed
@@ -96,7 +115,8 @@ Fixed in v0.2.0:
 
 ---
 
-[Unreleased]: https://github.com/Croxus-Labs/aion-torch/compare/v0.3.3...HEAD
+[Unreleased]: https://github.com/Croxus-Labs/aion-torch/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Croxus-Labs/aion-torch/compare/v0.3.3...v1.0.0
 [0.3.3]: https://github.com/Croxus-Labs/aion-torch/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/Croxus-Labs/aion-torch/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/Croxus-Labs/aion-torch/compare/v0.3.0...v0.3.1

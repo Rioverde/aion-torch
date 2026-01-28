@@ -145,3 +145,4 @@ docs/
 
 # Ruff cache
 .ruff_cache/
+claude.md
