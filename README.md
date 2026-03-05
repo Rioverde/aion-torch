@@ -70,8 +70,8 @@ class MyLayer(nn.Module):
         y = self.ffn(x_norm)
 
         # Apply adaptive residual connection
-        # Formula: x + alpha * y
-        return self.aion(residual, y)
+        # Formula: x + alpha * y, ratio uses x_norm per Definition 3.1
+        return self.aion(residual, y, x_norm=x_norm)
 ```
 
 ## 🧠 How It Works
@@ -88,13 +88,13 @@ where `ratio` measures the relative magnitude of the transformation output compa
 
 ### AION as the General Form
 
-Mathematically, other stabilization methods are just **special cases** of the AION formula where adaptivity ($\beta$) is turned off:
+Mathematically, other stabilization methods can be seen as **special cases or approximations** of the AION formula where adaptivity ($\beta$) is turned off:
 
 | Method | AION Equivalent Parameters | Behavior |
 |:---|:---|:---|
 | **DeepNorm** | $\beta=0, \alpha_0 = \frac{1}{\sqrt{2L}}$ | Fixed static scaling based on depth |
 | **Pre-LN** | $\beta=0, \alpha_0 = 1$ | No scaling (identity) |
-| **ReZero** | $\beta=0, \alpha_0 = \text{learnable}$ | Learnable static scalar |
+| **ReZero** | $\beta=0, \alpha_0 = \text{learnable}$ | Approximates ReZero (learnable static scalar) |
 | **AION** | $\beta > 0$ | **Dynamic adaptation** based on signal energy |
 
 AION generalizes these approaches by adding the **control term** ($1 + \beta \cdot \text{ratio}$), allowing it to react to instability in real-time rather than relying on static assumptions.
