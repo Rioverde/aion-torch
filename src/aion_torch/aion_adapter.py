@@ -78,13 +78,20 @@ class AionResidual(nn.Module):
         self.alpha_cached: torch.Tensor
 
     def forward(
-        self, x: torch.Tensor, y: torch.Tensor, return_stats: bool = False
+        self,
+        x: torch.Tensor,
+        y: torch.Tensor,
+        x_norm: torch.Tensor | None = None,
+        return_stats: bool = False,
     ) -> torch.Tensor | tuple[torch.Tensor, dict[str, float]]:
         """Apply adaptive residual connection.
 
         Args:
             x: Input tensor (residual branch input)
             y: Transform output tensor (e.g., from FFN, attention)
+            x_norm: Normalized input tensor (e.g., LayerNorm(x)). Used for
+                computing the energy ratio as per Definition 3.1:
+                r_l = E[y] / (E[x_norm] + ε). If None, falls back to x.
             return_stats: Whether to return internal statistics (alpha, ratio)
 
         Returns:
@@ -109,10 +116,13 @@ class AionResidual(nn.Module):
         current_ratio_val = 0.0
         if self.training:
             # Compute energies
-            ex = energy(x, dim=-1, keepdim=False)  # [B, T] or [B] depending on dims
+            # Use x_norm (normalized input) for denominator when available,
+            # per Definition 3.1: r_l = E[y] / (E[x_norm] + ε)
+            denom_input = x_norm if x_norm is not None else x
+            ex = energy(denom_input, dim=-1, keepdim=False)  # [B, T] or [B]
             ey = energy(y, dim=-1, keepdim=False)
 
-            # Compute ratio: E[y]/(E[x] + ε)
+            # Compute ratio: E[y]/(E[x_norm] + ε)
             ratio = ey / (ex + self.epsilon)
 
             # Calculate mean ratio for this batch (scalar)

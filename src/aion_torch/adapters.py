@@ -4,6 +4,8 @@ This module defines the common interface that all residual adapters
 must implement, and provides high-level blocks for common patterns.
 """
 
+from __future__ import annotations
+
 from typing import Protocol
 
 import torch
@@ -83,4 +85,4 @@ class AionBlock(nn.Module):
         """
         x_norm = self.norm(x)
         y = self.layer(x_norm)
-        return self.aion(x, y)  # type: ignore
+        return self.aion(x, y, x_norm=x_norm)  # type: ignore

@@ -13,7 +13,7 @@ Basic usage:
     >>> out = layer(x, y)
 """
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 from .adapters import AionBlock
 from .aion_adapter import AionResidual
